@@ -2,8 +2,23 @@ const api ={
     key: 'd9c33cdac86a5158331c70cf6c9bea93',
     base: 'https://api.openweathermap.org/data/2.5/',
 };
+function searchQuery(evt) {
 const searchBox = document.querySelector('#search-input');
-searchBox.addEventListener('keypress', setQuery);
+if (searchBox.value){
+    getResults(searchBox.value);
+}
+}
+
+const searchBox = document.querySelector('#search-input');
+const searchBtn = document.querySelector('#searchbtn');
+
+searchBox.addEventListener('keypress', (evt) => {
+    if (evt.keyCode == 13 || 'Enter') {
+        setQuery(evt);
+    }
+});
+searchBtn.addEventListener('click', searchQuery);
+
 function setQuery(evt) {
     if (evt.keyCode == 13) {
         getResults(searchBox.value);
@@ -43,4 +58,14 @@ function dateBuilder(d) {
     let month = months[d.getMonth()];
     let year = d.getFullYear();  
     return `${day} ${date} ${month} ${year}`;
+}
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js').then(function(registration) {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+            console.log('ServiceWorker registration failed: ', err);
+        });
+    });
 }
